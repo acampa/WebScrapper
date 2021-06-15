@@ -3,7 +3,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class WebScrapper {
 
         try{
             HtmlPage htmlPage = webClient.getPage(baseUrl + URLEncoder.encode(searchQuery,"UTF-8"));
+            @SuppressWarnings("unchecked")
             List<HtmlElement> listOfItems = (List<HtmlElement>) htmlPage.getByXPath("//li[@class='result-row']");
             if(listOfItems.isEmpty()){
                 System.out.println("No items found");
@@ -36,7 +36,8 @@ public class WebScrapper {
                     item.setTitle(itemAnchor.asText());
                     item.setUrl(baseUrl + itemAnchor.getHrefAttribute());
 
-                    item.setPrice(new BigDecimal(itemPrice.replace("$","")));
+                    //item.setPrice(new String(itemPrice.replace("$",""))); without $ dollar sign
+                    item.setPrice(itemPrice);
 
                     ObjectMapper mapper = new ObjectMapper();
                     String jsonString = mapper.writeValueAsString((item));
