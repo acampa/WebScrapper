@@ -3,47 +3,48 @@ package pages;
 import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class HomePage {
+public class HomePage extends BasePage {
     //Web elements
-    private WebDriver driver;
-    private static By LanguageButton = By.xpath("//span[@class = 'language_txt']");
+    private static By LanguageButton = By.xpath("//div[@data-role = 'region-pannel']/a");
     private static By ShipToButton = By.xpath("//span[@class = 'shipping-text']");
     private static By ShipToSearchTextbox = By.xpath("//input[@placeholder = 'Search']");
     private static By SaveButton = By.xpath("//button[@data-role = 'save']");
+    private static By AllDataByScriptTag =  By.xpath("//script[contains(text(), 'window.runParams')]");
 
     public HomePage(WebDriver driver){
-        this.driver =driver;
+        super(driver);
     }
     //Methods
+    public String GetAllDataByScriptTag(){
+        wait.until(ExpectedConditions.presenceOfElementLocated(AllDataByScriptTag));
+        return driver.findElement(AllDataByScriptTag).getAttribute("innerHTML");
+    }
     public void ClickSaveButton(){
-        WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.elementToBeClickable(SaveButton));
         driver.findElement(SaveButton).click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(SaveButton));
     }
     public void EnterShipToSearchTextbox(String country){
-        WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.presenceOfElementLocated(ShipToSearchTextbox));
         driver.findElement(ShipToSearchTextbox).sendKeys(country);
     }
     public void SelectShipToCountry(String country){
-        WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(String.format("//li[@data-name = '%s']", country))));
         driver.findElement(By.xpath(String.format("//li[@data-name = '%s']", country))).click();
 
     }
     public void ClickShipToButton(){
-        WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.elementToBeClickable(ShipToButton));
         driver.findElement(ShipToButton).click();
     }
 
     public void ClickLanguageButton(){
-        WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.elementToBeClickable(LanguageButton));
-        driver.findElement(LanguageButton).click();
-        driver.findElement(LanguageButton).click();
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(LanguageButton)).click().build().perform();
     }
 }

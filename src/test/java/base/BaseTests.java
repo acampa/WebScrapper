@@ -7,30 +7,28 @@ import static java.net.URLEncoder.encode;
 
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
 import pages.HomePage;
 
 public class BaseTests {
-    private WebDriver driver;
-    protected HomePage homePage;
+    public WebDriver driver;
     private String searchQuery = "women's socks";
     private String baseUrl = "https://www.aliexpress.com/wholesale?catId=0&initiative_id=&SearchText=";
-    //WebDriverWait wait_;
 
-    @BeforeClass
+    @BeforeSuite
     public void SetUp() {
-        System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
         try {
+            System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
             driver = new ChromeDriver();
             driver.get(baseUrl + encode(searchQuery, "UTF-8"));
             System.out.println(driver.getTitle());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        homePage = new HomePage(driver);
-        //wait_ = new WebDriverWait(driver, 5);
     }
-    @AfterClass
+    @AfterSuite
     public void TearDown(){
         driver.quit();
     }
