@@ -15,18 +15,16 @@ import pages.HomePage;
 public class BaseTests {
     public WebDriver driver;
     private String searchQuery = "women's socks";
-    private String baseUrl = "https://www.aliexpress.com/wholesale?catId=0&initiative_id=&SearchText=";
+    //private String baseUrl = "https://www.aliexpress.com/wholesale?catId=0&initiative_id=&SearchText=";
+    private String baseUrl = "https://www.aliexpress.com/";
 
     @BeforeSuite
     public void SetUp() {
-        try {
-            System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
-            driver = new ChromeDriver();
-            driver.get(baseUrl + encode(searchQuery, "UTF-8"));
-            System.out.println(driver.getTitle());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
+        driver = new ChromeDriver();
+        //driver.get(baseUrl + encode(searchQuery, "UTF-8"));
+        driver.get(baseUrl);
+        //System.out.println(driver.getTitle());
     }
     @AfterSuite
     public void TearDown(){
